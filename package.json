@@ -52,11 +52,6 @@
     "lint-staged": "^13.0.3",
     "prettier": "2.7.1"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "src/**/*.js": [
       "npm run lint:fix",

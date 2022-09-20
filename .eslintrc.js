@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = {
     "env": {
         "browser": true,
@@ -5,11 +6,14 @@ module.exports = {
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/jsx-runtime",
+        "plugin:react/recommended",
     ],
     "overrides": [
     ],
     "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
@@ -17,5 +21,10 @@ module.exports = {
         "react"
     ],
     "rules": {
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }
