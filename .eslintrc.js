@@ -1,12 +1,11 @@
-{
+module.exports = {
     "env": {
         "browser": true,
         "es2021": true
     },
     "extends": [
-        "plugin:react/recommended",
-        "airbnb",
-        "prettier"
+        "eslint:recommended",
+        "plugin:react/jsx-runtime",
     ],
     "overrides": [
     ],
