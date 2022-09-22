@@ -1,12 +1,12 @@
 .cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    max-width: 1010px;
-    padding-top: 20px;
-    margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  max-width: 1010px;
+  padding-top: 20px;
+  margin: auto;
 }
 
 .cards-container > div {
-    margin-bottom: 35px;
+  margin-bottom: 35px;
 }

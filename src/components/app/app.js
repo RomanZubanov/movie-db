@@ -1,56 +1,48 @@
 import React, { Component } from 'react';
 
-import cutText from '../../services/cut-text';
-import dateFormat from '../../services/date-format';
-import convertGenre from '../../services/convert-genres';
 import Cards from '../cards';
-import SearchMoviesService from '../../services/search-movies-service';
+import MoviesService from '../../services/search-movies-service';
 import './app.css';
 
 export default class App extends Component {
-  searchMoviesService = new SearchMoviesService();
+  moviesService = new MoviesService();
 
   constructor(props) {
     super(props);
-    this.updateMoviesList('return');
+    this.updateMovies('return');
   }
 
   state = {
-    moviesList: [
-      {
-        id: 0,
-        title: null,
-        releaseDate: null,
-        genres: [null],
-        posterPath: null,
-        overview: null,
-      },
-    ],
+    moviesList: [],
+    loading: true,
+    error: false,
   };
 
-  updateMoviesList(search) {
-    this.searchMoviesService.getSearch(search).then((moviesPage) => {
-      const moviesArr = moviesPage.results.map((item) => {
-        return {
-          id: item.id,
-          title: cutText(item.title, 40),
-          releaseDate: dateFormat(item.release_date),
-          genres: convertGenre(item.genre_ids),
-          posterPath: item.poster_path,
-          overview: cutText(item.overview, 180),
-        };
-      });
-      this.setState({
-        moviesList: moviesArr,
-      });
+  updateMovies(search) {
+    this.moviesService.getMovies(search).then(
+      (movies) => {
+        this.setState({
+          moviesList: movies,
+          loading: false,
+        });
+      },
+      (e) => {
+        this.onError(e);
+      }
+      // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+      // чтобы не перехватывать исключения из ошибок в самих компонентах.
+    );
+  }
+
+  onError(e) {
+    this.setState({
+      loading: false,
+      error: e,
     });
   }
 
   render() {
-    return (
-      <div>
-        <Cards moviesList={this.state.moviesList} />
-      </div>
-    );
+    const { moviesList, loading, error } = this.state;
+    return <Cards moviesList={moviesList} loading={loading} error={error} />;
   }
 }

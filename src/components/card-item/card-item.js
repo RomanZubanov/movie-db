@@ -20,7 +20,7 @@ function CardItem({ movieInfo }) {
     );
   });
 
-  const posterURL = `https://image.tmdb.org/t/p/original/${posterPath}`;
+  const posterURL = `https://image.tmdb.org/t/p/original${posterPath}`;
   return (
     <div className="card-item">
       <div className="card-item__img-container">
