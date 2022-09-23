@@ -15,7 +15,15 @@ function Cards({ moviesList, loading, error }) {
   const errorMessage = <ErrorMessage error={error} />;
   const spinLoading = <Spin size="large" />;
 
-  const element = error ? errorMessage : loading ? spinLoading : items;
+  let element;
+
+  if (error) {
+    element = errorMessage;
+  } else if (loading) {
+    element = spinLoading;
+  } else {
+    element = items;
+  }
 
   return <div className="cards-container">{element}</div>;
 }

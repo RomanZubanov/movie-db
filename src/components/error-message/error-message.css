@@ -1,11 +1,11 @@
 .error-message {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .error-message img {
-    width: 800px;
-    margin-top: 50px;
+  width: 800px;
+  margin-top: 50px;
 }

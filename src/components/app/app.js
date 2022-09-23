@@ -9,14 +9,21 @@ export default class App extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      moviesList: [],
+      loading: true,
+      error: false,
+    };
     this.updateMovies('return');
   }
 
-  state = {
-    moviesList: [],
-    loading: true,
-    error: false,
-  };
+  onError(e) {
+    this.setState({
+      loading: false,
+      error: e,
+    });
+    throw e;
+  }
 
   updateMovies(search) {
     this.moviesService.getMovies(search).then(
@@ -32,13 +39,6 @@ export default class App extends Component {
       // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
       // чтобы не перехватывать исключения из ошибок в самих компонентах.
     );
-  }
-
-  onError(e) {
-    this.setState({
-      loading: false,
-      error: e,
-    });
   }
 
   render() {
