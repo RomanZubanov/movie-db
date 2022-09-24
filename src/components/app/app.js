@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Cards from '../cards';
+import SearchInput from '../search-input';
 import MoviesService from '../../services/search-movies-service';
 import './app.css';
 
@@ -14,8 +15,18 @@ export default class App extends Component {
       loading: true,
       error: false,
     };
-    this.updateMovies('return');
   }
+
+  componentDidMount() {
+    this.updateMovies('dflkdfndfba;fbbeb');
+  }
+
+  onSearchChange = (search) => {
+    this.setState({
+      loading: true,
+    });
+    this.updateMovies(search);
+  };
 
   onError(e) {
     this.setState({
@@ -43,6 +54,11 @@ export default class App extends Component {
 
   render() {
     const { moviesList, loading, error } = this.state;
-    return <Cards moviesList={moviesList} loading={loading} error={error} />;
+    return (
+      <div>
+        <SearchInput onSearchChange={this.onSearchChange} />
+        <Cards moviesList={moviesList} loading={loading} error={error} />
+      </div>
+    );
   }
 }

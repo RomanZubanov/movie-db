@@ -3,6 +3,7 @@ import { Spin } from 'antd';
 
 import CardItem from '../card-item';
 import ErrorMessage from '../error-message';
+import NothingFound from '../nothing-found';
 
 import './cards.css';
 
@@ -14,6 +15,7 @@ function Cards({ moviesList, loading, error }) {
 
   const errorMessage = <ErrorMessage error={error} />;
   const spinLoading = <Spin size="large" />;
+  const nothingFound = <NothingFound />;
 
   let element;
 
@@ -22,7 +24,7 @@ function Cards({ moviesList, loading, error }) {
   } else if (loading) {
     element = spinLoading;
   } else {
-    element = items;
+    element = items.length > 0 ? items : nothingFound;
   }
 
   return <div className="cards-container">{element}</div>;
