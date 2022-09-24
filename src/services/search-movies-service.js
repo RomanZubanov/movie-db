@@ -2,8 +2,8 @@ import cutText from './cut-text';
 import dateFormat from './date-format';
 import convertGenre from './convert-genres';
 
-function transformMoviesList(moviesList) {
-  return moviesList.results.map((movie) => ({
+function transformMoviesArray(moviesArray) {
+  return moviesArray.map((movie) => ({
     id: movie.id,
     title: cutText(movie.title, 40),
     releaseDate: dateFormat(movie.release_date),
@@ -18,15 +18,16 @@ export default class MoviesService {
 
   apiKey = '12c052732f00500a4355cf2bf4538874';
 
-  async getSearch(search) {
+  async getSearch(search, page = 1) {
     try {
       const res = await fetch(
-        `${this.apiBase}search/movie?api_key=${this.apiKey}&language=en-US&query=${search}&page=1&include_adult=false`
+        `${this.apiBase}search/movie?api_key=${this.apiKey}&language=en-US&query=${search}&page=${page}&include_adult=false`
       );
       if (!res.ok) {
         throw new Error(`Could not fetch Search Movies. Received ${res.status}`);
       }
-      return await res.json();
+      const result = await res.json();
+      return result;
     } catch (e) {
       if (e.name !== 'Error') {
         e.connection = true;
@@ -35,8 +36,13 @@ export default class MoviesService {
     }
   }
 
-  async getMovies(search) {
-    const movies = await this.getSearch(search);
-    return transformMoviesList(movies);
+  async getMovies(search, page) {
+    const searchData = await this.getSearch(search, page);
+    const moviesList = transformMoviesArray(searchData.results);
+    return {
+      moviesList,
+      totalPages: searchData.total_pages,
+      totalMovies: searchData.total_results,
+    };
   }
 }

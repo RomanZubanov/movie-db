@@ -1,0 +1,11 @@
+.wrapper {
+    max-width: 1010px;
+    margin: auto;
+    padding-bottom: 80px;
+}
+
+.pagination {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}

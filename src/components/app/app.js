@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Pagination } from 'antd';
+import debounce from 'lodash/debounce';
 
 import Cards from '../cards';
 import SearchInput from '../search-input';
@@ -12,20 +14,29 @@ export default class App extends Component {
     super(props);
     this.state = {
       moviesList: [],
+      totalMovies: null,
+      search: 'return',
       loading: true,
       error: false,
     };
   }
 
   componentDidMount() {
-    this.updateMovies('dflkdfndfba;fbbeb');
+    const { search } = this.state;
+    this.updateMovies(search);
   }
 
   onSearchChange = (search) => {
     this.setState({
       loading: true,
+      search,
     });
     this.updateMovies(search);
+  };
+
+  onPageChange = (pageNumber) => {
+    const { search } = this.state;
+    this.updateMovies(search, pageNumber);
   };
 
   onError(e) {
@@ -36,11 +47,12 @@ export default class App extends Component {
     throw e;
   }
 
-  updateMovies(search) {
-    this.moviesService.getMovies(search).then(
-      (movies) => {
+  updateMovies(search, page) {
+    this.moviesService.getMovies(search, page).then(
+      ({ moviesList, totalMovies }) => {
         this.setState({
-          moviesList: movies,
+          moviesList,
+          totalMovies,
           loading: false,
         });
       },
@@ -53,11 +65,20 @@ export default class App extends Component {
   }
 
   render() {
-    const { moviesList, loading, error } = this.state;
+    const { moviesList, totalMovies, loading, error } = this.state;
     return (
-      <div>
+      <div className="wrapper">
         <SearchInput onSearchChange={this.onSearchChange} />
         <Cards moviesList={moviesList} loading={loading} error={error} />
+        <Pagination
+          className="pagination"
+          defaultCurrent={1}
+          total={totalMovies}
+          onChange={debounce(this.onPageChange, 2000)}
+          defaultPageSize={20}
+          showSizeChanger={false}
+          hideOnSinglePage
+        />
       </div>
     );
   }
