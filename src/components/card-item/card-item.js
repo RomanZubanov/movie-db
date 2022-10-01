@@ -1,24 +1,17 @@
 import React from 'react';
 import { Image, Typography } from 'antd';
 
+import RatingStars from '../rating-stars';
+import RatingAverage from '../rating-average';
+import { GenreConsumer } from '../genre-context';
+
 import 'antd/dist/antd.min.css';
 import './card-item.css';
 
 const { Title, Text } = Typography;
 
-function CardItem({ movieInfo }) {
-  const { title, releaseDate, genres, posterPath, overview } = movieInfo;
-
-  let IDGenre = 0;
-
-  const genresArr = genres.map((genre) => {
-    IDGenre += 1;
-    return (
-      <Text key={IDGenre} code>
-        {genre}
-      </Text>
-    );
-  });
+function CardItem({ onVote, movieId, movieInfo }) {
+  const { title, releaseDate, genres, posterPath, overview, ratingAverage, rating } = movieInfo;
 
   const posterURL = `https://image.tmdb.org/t/p/original${posterPath}`;
   return (
@@ -33,14 +26,29 @@ function CardItem({ movieInfo }) {
         />
       </div>
       <div className="card-item__info">
+        <RatingAverage ratingAverage={ratingAverage} />
         <Title level={4} className="card-item__title">
           {title}
         </Title>
         <Text className="card-item__date" type="secondary">
           {releaseDate}
         </Text>
-        <div className="card-item__tags">{genresArr}</div>
+        <GenreConsumer>
+          {(genreDictionary) => {
+            const genresArr = genres.map((genre) => {
+              const genreText = genreDictionary[genre];
+              return (
+                <Text key={genre} code>
+                  {genreText}
+                </Text>
+              );
+            });
+            return <div className="card-item__tags">{genresArr}</div>;
+          }}
+        </GenreConsumer>
+
         <Text className="card-item__text">{overview}</Text>
+        <RatingStars movieId={movieId} onVote={onVote} rating={rating} />
       </div>
     </div>
   );

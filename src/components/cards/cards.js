@@ -7,10 +7,10 @@ import NothingFound from '../nothing-found';
 
 import './cards.css';
 
-function Cards({ moviesList, loading, error }) {
+function Cards({ moviesList, loading, error, onVote }) {
   const items = moviesList.map((item) => {
     const { id, ...movieInfo } = item;
-    return <CardItem key={id} movieInfo={movieInfo} />;
+    return <CardItem key={id} movieId={id} movieInfo={movieInfo} onVote={onVote} />;
   });
 
   const errorMessage = <ErrorMessage error={error} />;

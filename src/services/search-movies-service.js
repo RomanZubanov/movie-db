@@ -1,15 +1,16 @@
 import cutText from './cut-text';
 import dateFormat from './date-format';
-import convertGenre from './convert-genres';
 
 function transformMoviesArray(moviesArray) {
   return moviesArray.map((movie) => ({
     id: movie.id,
     title: cutText(movie.title, 40),
     releaseDate: dateFormat(movie.release_date),
-    genres: convertGenre(movie.genre_ids),
+    genres: movie.genre_ids,
     posterPath: movie.poster_path,
     overview: cutText(movie.overview, 180),
+    ratingAverage: movie.vote_average.toFixed(1),
+    rating: movie.rating,
   }));
 }
 
@@ -26,8 +27,30 @@ export default class MoviesService {
       if (!res.ok) {
         throw new Error(`Could not fetch Search Movies. Received ${res.status}`);
       }
+      return await res.json();
+    } catch (e) {
+      if (e.name !== 'Error') {
+        e.connection = true;
+      }
+      throw e;
+    }
+  }
+
+  async getRatedMovies(sessionId) {
+    try {
+      const res = await fetch(
+        `${this.apiBase}guest_session/${sessionId}/rated/movies?api_key=${this.apiKey}&language=en-US&sort_by=created_at.asc`
+      );
+      if (!res.ok) {
+        throw new Error(`Could not fetch Search Movies. Received ${res.status}`);
+      }
       const result = await res.json();
-      return result;
+      const moviesList = transformMoviesArray(result.results);
+      return {
+        moviesList,
+        totalPages: result.total_pages,
+        totalMovies: result.total_results,
+      };
     } catch (e) {
       if (e.name !== 'Error') {
         e.connection = true;
@@ -37,12 +60,12 @@ export default class MoviesService {
   }
 
   async getMovies(search, page) {
-    const searchData = await this.getSearch(search, page);
-    const moviesList = transformMoviesArray(searchData.results);
+    const result = await this.getSearch(search, page);
+    const moviesList = transformMoviesArray(result.results);
     return {
       moviesList,
-      totalPages: searchData.total_pages,
-      totalMovies: searchData.total_results,
+      totalPages: result.total_pages,
+      totalMovies: result.total_results,
     };
   }
 }
