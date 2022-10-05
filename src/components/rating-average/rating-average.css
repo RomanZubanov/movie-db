@@ -1,31 +1,30 @@
 .rating-average {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    right: 10px;
-    top: 12px;
-    width: 34px;
-    height: 34px;
-    border: 2px solid;
-    border-radius: 30px;
-    font-size: 12px;
-    font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  width: 34px;
+  height: 34px;
+  border: 2px solid;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 400;
 }
 
 .rating-average--0-3 {
-    border-color: #E90000;
+  border-color: #e90000;
 }
 
 .rating-average--3-5 {
-    border-color: #E97E00;
+  border-color: #e97e00;
 }
 
 .rating-average--5-7 {
-    border-color: #E9D100;
+  border-color: #e9d100;
 }
 
 .rating-average--7-10 {
-    border-color: #66E900;
+  border-color: #66e900;
 }
-

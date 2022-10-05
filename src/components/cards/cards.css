@@ -3,10 +3,10 @@
   flex-wrap: wrap;
   justify-content: space-evenly;
   max-width: 1010px;
-  padding-top: 20px;
+  padding: 20px 16px 20px 16px;
   margin: auto;
 }
 
 .cards-container > div {
-  margin-bottom: 35px;
+  margin-bottom: 20px;
 }
