@@ -1,5 +1,4 @@
-import React from 'react';
-
+import PropTypes from 'prop-types';
 import './rating-average.css';
 
 export default function RatingAverage({ ratingAverage }) {
@@ -16,3 +15,7 @@ export default function RatingAverage({ ratingAverage }) {
 
   return <div className={`rating-average ${classRatingAverage}`}>{ratingAverage}</div>;
 }
+
+RatingAverage.propTypes = {
+  ratingAverage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+};

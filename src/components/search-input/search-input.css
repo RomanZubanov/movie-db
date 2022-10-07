@@ -1,10 +1,9 @@
 .search-container {
-  max-width: 936px;
-  padding-top: 20px;
-  margin: auto;
+  display: flex;
+  justify-content: center;
+  padding: 20px 16px 0 16px;
 }
-@media screen and (max-width: 520px) {
-  .search-container {
-    padding: 20px 16px 0px 16px;
-  }
+
+.search-container input {
+  max-width: 936px;
 }

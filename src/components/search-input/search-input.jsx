@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import { Input } from 'antd';
 
@@ -17,5 +17,9 @@ function SearchInput({ onSearchChange }) {
     </div>
   );
 }
+
+SearchInput.propTypes = {
+  onSearchChange: PropTypes.func.isRequired,
+};
 
 export default SearchInput;

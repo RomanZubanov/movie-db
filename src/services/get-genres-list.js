@@ -1,10 +1,4 @@
-const makeGenreDictionary = (genreObject) => {
-  const genreDictionary = {};
-  genreObject.genres.forEach((item) => {
-    genreDictionary[item.id] = item.name;
-  });
-  return genreDictionary;
-};
+import makeGenreDictionary from '../helpers/make-genre-dictionary';
 
 export default async function getGenresList() {
   const res = await fetch(
@@ -15,7 +9,5 @@ export default async function getGenresList() {
   }
   const genreList = await res.json();
 
-  const GenreDictionary = makeGenreDictionary(genreList);
-
-  return GenreDictionary;
+  return makeGenreDictionary(genreList);
 }

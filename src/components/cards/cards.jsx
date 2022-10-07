@@ -1,5 +1,5 @@
-import React from 'react';
 import { Spin } from 'antd';
+import PropTypes from 'prop-types';
 
 import CardItem from '../card-item';
 import ErrorMessage from '../error-message';
@@ -29,5 +29,17 @@ function Cards({ moviesList, loading, error, onVote }) {
 
   return <div className="cards-container">{element}</div>;
 }
+
+Cards.propTypes = {
+  moviesList: PropTypes.arrayOf(
+    PropTypes.shape({
+      optionalProperty: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    })
+  ),
+};
+
+Cards.defaultProps = {
+  moviesList: [{ id: 0, title: '' }],
+};
 
 export default Cards;

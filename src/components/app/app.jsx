@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Tabs } from 'antd';
 
 import MoviesList from '../movies-list';
-import MoviesService from '../../services/search-movies-service';
+import GetMovies from '../../services/get-movies';
 import getSessionId from '../../services/get-session-id';
 import getGenresList from '../../services/get-genres-list';
 import { GenreProvider } from '../genre-context';
@@ -11,7 +11,7 @@ import './app.css';
 import SearchInput from '../search-input';
 
 export default class App extends Component {
-  moviesService = new MoviesService();
+  moviesService = new GetMovies();
 
   constructor(props) {
     super(props);
@@ -25,6 +25,7 @@ export default class App extends Component {
       loading: true,
       error: false,
       sessionId: null,
+      activeTab: 'search',
     };
   }
 
@@ -41,24 +42,24 @@ export default class App extends Component {
         this.setState({ sessionId: res });
       })
       .then(() => {
-        this.updateMovies(search);
+        this.updateMoviesSearch(search, 1);
       });
   }
 
   onSearchChange = (search) => {
     this.setState({
-      loading: true,
       search,
     });
-    this.updateMovies(search);
+    this.updateMoviesSearch(search, 1);
   };
 
   onPageChange = (pageNumber) => {
-    const { search } = this.state;
-    this.setState({
-      loading: true,
-    });
-    this.updateMovies(search, pageNumber);
+    const { search, activeTab } = this.state;
+    if (activeTab === 'search') {
+      this.updateMoviesSearch(search, pageNumber);
+    } else {
+      this.updateMoviesRated(pageNumber);
+    }
   };
 
   onError(e) {
@@ -72,25 +73,47 @@ export default class App extends Component {
   onVote = (movieId, value) => {
     const { sessionId } = this.state;
     voting(sessionId, movieId, value);
+    this.setState(({ moviesList }) => {
+      const newArr = moviesList.map((movie) => {
+        if (movieId === movie.id) {
+          return { ...movie, rating: value };
+        }
+        return movie;
+      });
+      return { moviesList: newArr };
+    });
   };
 
   onTabChange = (key) => {
-    const { sessionId } = this.state;
+    this.setState({ activeTab: key });
     if (key === 'rated') {
-      this.setState({
-        loading: true,
-      });
-      this.moviesService.getRatedMovies(sessionId).then(({ moviesList, totalMovies }) => {
+      this.updateMoviesRated(1);
+    }
+  };
+
+  updateMoviesRated(page) {
+    const { sessionId } = this.state;
+    this.setState({
+      loading: true,
+    });
+    this.moviesService.getRatedMovies(sessionId, page).then(
+      ({ moviesList, totalMovies }) => {
         this.setState({
           moviesRatedList: moviesList,
           totalMoviesRated: totalMovies,
           loading: false,
         });
-      });
-    }
-  };
+      },
+      (e) => {
+        this.onError(e);
+      }
+    );
+  }
 
-  updateMovies(search, page = 1) {
+  updateMoviesSearch(search, page) {
+    this.setState({
+      loading: true,
+    });
     this.moviesService.getMovies(search, page).then(
       ({ moviesList, totalMovies }) => {
         this.setState({
@@ -102,8 +125,6 @@ export default class App extends Component {
       (e) => {
         this.onError(e);
       }
-      // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
-      // чтобы не перехватывать исключения из ошибок в самих компонентах.
     );
   }
 

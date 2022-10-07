@@ -1,5 +1,5 @@
-import React from 'react';
 import { Alert } from 'antd';
+import PropTypes from 'prop-types';
 
 import './error-message.css';
 import errorServer from './error-server.png';
@@ -36,5 +36,9 @@ function ErrorConnection() {
     </div>
   );
 }
+
+ErrorMessage.propTypes = {
+  error: PropTypes.oneOfType([PropTypes.bool, PropTypes.instanceOf(Error)]).isRequired,
+};
 
 export default ErrorMessage;

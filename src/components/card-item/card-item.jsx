@@ -1,5 +1,5 @@
-import React from 'react';
 import { Image, Typography } from 'antd';
+import PropTypes from 'prop-types';
 
 import RatingStars from '../rating-stars';
 import RatingAverage from '../rating-average';
@@ -65,5 +65,15 @@ function CardItem({ onVote, movieId, movieInfo }) {
     </div>
   );
 }
+
+CardItem.propTypes = {
+  movieInfo: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.array])),
+  onVote: PropTypes.func.isRequired,
+  movieId: PropTypes.number.isRequired,
+};
+
+CardItem.defaultProps = {
+  movieInfo: { title: '' },
+};
 
 export default CardItem;
